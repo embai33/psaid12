@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>PsAID-12 — Cuestionario de Impacto de la Artritis Psoriásica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F3EE;--surface:#FFFFFF;
+  --primary:#2D6A8E;--primary-light:#E8F1F6;--primary-dark:#1B4A66;
+  --accent:#D4763A;--accent-light:#FDF0E7;
+  --text:#2C2C2C;--text-sec:#5A5A5A;
+  --border:#E2DED6;--track:#D9D5CC;
+  --green:#1A7A34;--green-bg:#E6F7EC;
+  --orange:#A0521A;--orange-bg:#FDF0E7;
+  --radius:16px;--radius-lg:24px;
+  --shadow:0 2px 8px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.04);
+  --font-d:'Fraunces',Georgia,serif;
+  --font-b:'DM Sans',system-ui,sans-serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font-b);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100dvh;overflow-x:hidden}
+
+/* Skip link */
+.skip-link{position:absolute;top:-100%;left:1rem;padding:.6rem 1rem;background:var(--primary);color:white;border-radius:0 0 8px 8px;z-index:999;font-weight:600;text-decoration:none;font-size:.9rem}
+.skip-link:focus{top:0}
+
+/* Lang switcher */
+.lang-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:flex-end;align-items:center;padding:.4rem .8rem;background:var(--primary-dark);gap:.4rem}
+.lang-btn{padding:.3rem .7rem;font-family:var(--font-b);font-size:.78rem;font-weight:600;border:1.5px solid rgba(255,255,255,.3);border-radius:100px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;-webkit-tap-highlight-color:transparent;background:transparent;color:rgba(255,255,255,.7)}
+.lang-btn:hover{background:rgba(255,255,255,.1)}
+.lang-btn:focus-visible{outline:2px solid white;outline-offset:2px}
+.lang-btn.active{background:white;color:var(--primary-dark);border-color:white}
+body{padding-top:36px}
+
+/* QR desktop only */
+.qr-section{display:none;text-align:center;margin:1.5rem 0}
+.qr-section canvas{border-radius:var(--radius);border:1px solid var(--border)}
+.qr-label{font-size:.78rem;color:var(--text-sec);margin-top:.4rem}
+@media(min-width:769px){.qr-section{display:block}}
+
+.screen{display:none;min-height:calc(100dvh - 36px)}
+.screen.active{display:flex;flex-direction:column}
+
+/* Focus visible */
+*:focus-visible{outline:3px solid var(--primary);outline-offset:2px;border-radius:4px}
+button:focus-visible,a:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+
+/* WELCOME */
+.welcome{justify-content:center;align-items:center;padding:2rem 1.5rem;text-align:center}
+.welcome-card{background:var(--surface);border-radius:var(--radius-lg);padding:2.5rem 2rem;max-width:440px;width:100%;box-shadow:var(--shadow)}
+.welcome-icon{width:72px;height:72px;background:var(--primary-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem}
+.welcome-icon svg{width:36px;height:36px;color:var(--primary)}
+.welcome h1{font-family:var(--font-d);font-size:1.8rem;font-weight:700;color:var(--primary-dark);margin-bottom:.3rem}
+.welcome .subtitle{font-size:.95rem;color:var(--text-sec);margin-bottom:1.5rem}
+.welcome-info{background:var(--accent-light);border-left:4px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:1rem 1.2rem;text-align:left;font-size:1.05rem;line-height:1.7;color:#5A3E1A;margin-bottom:2rem}
+.welcome-meta{display:flex;justify-content:center;gap:1.5rem;margin-bottom:2rem;font-size:.92rem;color:var(--text-sec)}
+.welcome-meta span{display:flex;align-items:center;gap:.35rem}
+.welcome-meta svg{width:18px;height:18px;opacity:.6}
+.btn-start{display:inline-flex;align-items:center;gap:.7rem;padding:1.1rem 2.5rem;font-family:var(--font-b);font-size:1.15rem;font-weight:700;color:white;background:var(--primary);border:none;border-radius:100px;cursor:pointer;box-shadow:0 4px 16px rgba(45,106,142,.35);transition:transform .2s var(--ease);-webkit-tap-highlight-color:transparent}
+.btn-start:active{transform:scale(.97)}
+.btn-start svg{width:22px;height:22px}
+
+/* WIZARD */
+.wizard{padding:0}
+.wizard-top{position:sticky;top:36px;z-index:50;background:rgba(245,243,238,.95);backdrop-filter:blur(10px);padding:.8rem 1.2rem .6rem;border-bottom:1px solid var(--border)}
+.wizard-progress-label{display:flex;justify-content:space-between;font-size:.88rem;font-weight:600;color:var(--text-sec);margin-bottom:.4rem}
+.wizard-progress-track{width:100%;height:6px;background:var(--track);border-radius:100px;overflow:hidden}
+.wizard-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:100px;transition:width .4s var(--ease)}
+.wizard-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:1.5rem 1.2rem 1rem;max-width:560px;margin:0 auto;width:100%}
+.wizard-domain{font-family:var(--font-d);font-weight:700;font-size:1.3rem;color:var(--primary-dark);margin-bottom:.6rem;text-align:center}
+.wizard-question{font-size:1.12rem;line-height:1.65;color:var(--text);text-align:center;margin-bottom:2rem;min-height:3em}
+.big-value{text-align:center;margin-bottom:.5rem}
+.big-value-num{display:inline-flex;align-items:center;justify-content:center;width:76px;height:76px;border-radius:50%;background:var(--primary);color:white;font-family:var(--font-d);font-size:2.4rem;font-weight:700;box-shadow:0 4px 16px rgba(45,106,142,.3);transition:transform .15s ease}
+.big-value-num.bounce{animation:popBounce .25s ease}
+@keyframes popBounce{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+.slider-area{padding:0 .25rem}
+.slider-anchors-top{display:flex;justify-content:space-between;margin-bottom:.3rem}
+.anchor-label{font-size:.88rem;font-weight:600;color:var(--text-sec);max-width:42%;line-height:1.3}
+.anchor-label.left{text-align:left}.anchor-label.right{text-align:right}
+.slider-ticks{display:flex;justify-content:space-between;padding:0 2px;margin-top:.4rem;user-select:none;-webkit-user-select:none}
+.tick{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;font-size:.92rem;font-weight:600;color:var(--text-sec);cursor:pointer;transition:background .15s ease,color .15s ease,transform .1s ease;-webkit-tap-highlight-color:transparent;background:none;border:none;font-family:var(--font-b)}
+.tick:active{transform:scale(.9)}
+.tick.active{background:var(--primary);color:white;font-weight:700;transform:scale(1.08)}
+.tick:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+input[type="range"].big-slider{-webkit-appearance:none;appearance:none;width:100%;height:12px;border-radius:100px;background:var(--track);outline:none;cursor:pointer;margin:.6rem 0 .1rem;touch-action:none}
+input[type="range"].big-slider::-webkit-slider-thumb{-webkit-appearance:none;width:48px;height:48px;border-radius:50%;background:var(--primary);border:4px solid white;box-shadow:0 3px 12px rgba(45,106,142,.4);cursor:grab}
+input[type="range"].big-slider::-webkit-slider-thumb:active{cursor:grabbing;box-shadow:0 4px 20px rgba(45,106,142,.5)}
+input[type="range"].big-slider::-moz-range-thumb{width:48px;height:48px;border-radius:50%;background:var(--primary);border:4px solid white;box-shadow:0 3px 12px rgba(45,106,142,.4);cursor:grab}
+input[type="range"].big-slider::-moz-range-track{height:12px;border-radius:100px;background:var(--track)}
+input[type="range"].big-slider:focus-visible{outline:3px solid var(--primary);outline-offset:4px;border-radius:100px}
+.slider-anchor-row{display:flex;justify-content:space-between;padding:.15rem 0 0}
+.anchor-end{font-size:1rem;font-weight:700;color:var(--text-sec)}
+.wizard-nav{padding:1rem 1.2rem 1.5rem;display:flex;gap:.8rem;max-width:560px;margin:0 auto;width:100%}
+.btn-nav{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:1rem;font-family:var(--font-b);font-size:1.05rem;font-weight:700;border-radius:100px;cursor:pointer;border:none;min-height:56px;transition:transform .15s ease;-webkit-tap-highlight-color:transparent}
+.btn-nav:active{transform:scale(.97)}
+.btn-prev{background:var(--surface);color:var(--text-sec);border:2px solid var(--border)}
+.btn-prev:disabled{opacity:.3;cursor:not-allowed}
+.btn-next{background:var(--primary);color:white;box-shadow:0 3px 12px rgba(45,106,142,.3)}
+.btn-nav svg{width:20px;height:20px;flex-shrink:0}
+
+/* REVIEW */
+.review{padding:0}
+.review-top{background:var(--primary-dark);color:white;padding:1.5rem;text-align:center}
+.review-top h2{font-family:var(--font-d);font-size:1.4rem;font-weight:700;margin-bottom:.2rem}
+.review-top p{font-size:.9rem;opacity:.8}
+.review-list{padding:1rem 1rem 0;max-width:560px;margin:0 auto;width:100%}
+.review-item{display:flex;align-items:center;gap:.8rem;background:var(--surface);border-radius:var(--radius);padding:.9rem 1rem;margin-bottom:.6rem;box-shadow:0 1px 4px rgba(0,0,0,.04);cursor:pointer;transition:box-shadow .2s ease,border-color .2s ease;border:2px solid transparent;-webkit-tap-highlight-color:transparent}
+.review-item:hover,.review-item:focus-visible{box-shadow:0 2px 8px rgba(0,0,0,.08);border-color:var(--primary-light)}
+.review-item:active{transform:scale(.99)}
+.review-num{width:30px;height:30px;min-width:30px;display:flex;align-items:center;justify-content:center;background:var(--primary);color:white;border-radius:50%;font-weight:700;font-size:.8rem}
+.review-info{flex:1;min-width:0}
+.review-domain{font-weight:600;font-size:.92rem;color:var(--text)}
+.review-val{display:flex;align-items:center;gap:.5rem}
+.review-bar{flex:1;height:6px;background:var(--track);border-radius:100px;overflow:hidden}
+.review-bar-fill{height:100%;border-radius:100px;transition:width .4s var(--ease)}
+.review-score{font-weight:700;font-size:1.05rem;color:var(--primary-dark);min-width:28px;text-align:right}
+.review-edit-hint{color:var(--primary);font-size:.72rem;font-weight:500}
+.review-actions{padding:1.2rem 1rem 2rem;max-width:560px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:.7rem}
+.btn-calculate{display:flex;align-items:center;justify-content:center;gap:.6rem;padding:1.1rem;font-family:var(--font-b);font-size:1.15rem;font-weight:700;color:white;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:none;border-radius:100px;cursor:pointer;box-shadow:0 4px 16px rgba(45,106,142,.35);min-height:56px;-webkit-tap-highlight-color:transparent;transition:transform .2s ease}
+.btn-calculate:active{transform:scale(.97)}
+.btn-calculate svg{width:22px;height:22px}
+.btn-back-edit{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.9rem;font-family:var(--font-b);font-size:.95rem;font-weight:600;color:var(--text-sec);background:var(--surface);border:2px solid var(--border);border-radius:100px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* RESULT */
+.result-screen{padding:0}
+.result-header{padding:2rem 1.5rem 1.5rem;text-align:center}
+.result-header.acceptable{background:linear-gradient(180deg,var(--green-bg) 0%,var(--bg) 100%)}
+.result-header.significant{background:linear-gradient(180deg,var(--orange-bg) 0%,var(--bg) 100%)}
+.result-score-big{font-family:var(--font-d);font-size:4rem;font-weight:700;line-height:1;margin-bottom:.1rem}
+.result-score-big.green{color:var(--green)}.result-score-big.orange{color:var(--orange)}
+.result-scale-label{font-size:.88rem;color:var(--text-sec);margin-bottom:1rem}
+.result-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.6rem 1.2rem;border-radius:100px;font-weight:700;font-size:.95rem;margin-bottom:.6rem}
+.result-badge svg{width:20px;height:20px}
+.result-badge.acceptable{background:var(--green-bg);color:var(--green)}
+.result-badge.significant{background:var(--orange-bg);color:var(--orange)}
+.result-message{font-size:.92rem;line-height:1.6;color:var(--text-sec);max-width:480px;margin:0 auto;padding:0 1rem}
+.result-body{max-width:560px;margin:0 auto;padding:1rem 1rem 1rem;width:100%}
+
+.priority-box{background:var(--accent-light);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1rem;border-left:4px solid var(--accent)}
+.priority-title{font-weight:700;font-size:.88rem;color:var(--orange);margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.priority-title svg{width:18px;height:18px;flex-shrink:0}
+.priority-item{display:flex;align-items:center;gap:.5rem;padding:.3rem 0;font-size:.9rem}
+.priority-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.priority-name{flex:1;color:var(--text)}.priority-val{font-weight:700;color:var(--primary-dark)}
+.priority-note{font-size:.8rem;color:var(--text-sec);margin-top:.5rem;line-height:1.5;font-style:italic}
+
+.comparison-box{border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1rem;border:1px solid var(--border);background:var(--surface)}
+.comparison-title{font-weight:700;font-size:.88rem;color:var(--primary-dark);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem}
+.comparison-title svg{width:18px;height:18px;flex-shrink:0}
+.comparison-row{display:flex;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap}
+.comparison-cell{flex:1;min-width:80px;text-align:center;padding:.5rem;background:var(--bg);border-radius:10px}
+.comparison-cell-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.03em;color:var(--text-sec);font-weight:600}
+.comparison-cell-val{font-family:var(--font-d);font-size:1.5rem;font-weight:700}
+.comparison-cell-val.green{color:var(--green)}.comparison-cell-val.orange{color:var(--orange)}.comparison-cell-val.primary{color:var(--primary-dark)}
+.comparison-cell-date{font-size:.68rem;color:var(--text-sec)}
+.comparison-verdict{font-size:.85rem;line-height:1.5;padding:.6rem .8rem;border-radius:10px;margin-top:.3rem}
+.comparison-verdict.improved{background:var(--green-bg);color:var(--green)}
+.comparison-verdict.worsened{background:var(--orange-bg);color:var(--orange)}
+.comparison-verdict.stable{background:var(--primary-light);color:var(--primary-dark)}
+
+.result-radar{margin:1rem 0;text-align:center}
+.result-radar-title{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-sec);margin-bottom:.5rem}
+.radar-wrapper{position:relative;width:100%;max-width:420px;margin:0 auto;aspect-ratio:1/1}
+.radar-wrapper canvas{width:100%;height:100%;display:block}
+.result-cutoff{font-size:.78rem;color:var(--text-sec);text-align:center;padding:.8rem 0;border-top:1px solid var(--border);margin-bottom:1rem}
+.detail-toggle{display:flex;align-items:center;justify-content:center;gap:.4rem;width:100%;padding:.7rem;background:none;border:1px solid var(--border);border-radius:100px;font-family:var(--font-b);font-size:.85rem;font-weight:600;color:var(--text-sec);cursor:pointer;-webkit-tap-highlight-color:transparent;margin-bottom:.8rem}
+.detail-toggle:hover{background:var(--primary-light);color:var(--primary)}
+.detail-toggle svg{width:16px;height:16px;transition:transform .25s var(--ease)}
+.detail-toggle.open svg{transform:rotate(180deg)}
+.detail-table{display:none;margin-bottom:1rem}.detail-table.visible{display:block}
+.detail-row{display:flex;align-items:center;padding:.45rem 0;font-size:.85rem;border-bottom:1px solid rgba(0,0,0,.04)}
+.detail-domain{flex:1;color:var(--text-sec)}
+.detail-weight{width:32px;text-align:center;font-size:.72rem;color:var(--text-sec);opacity:.6}
+.detail-bar-wrap{width:70px;height:6px;background:var(--track);border-radius:100px;overflow:hidden;margin:0 .5rem}
+.detail-bar-fill{height:100%;border-radius:100px}
+.detail-val{width:28px;text-align:right;font-weight:700}
+
+.save-area{display:flex;gap:.6rem;margin-bottom:1rem;align-items:center}
+.btn-save{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem 1rem;font-family:var(--font-b);font-size:.88rem;font-weight:600;border-radius:100px;cursor:pointer;border:2px solid var(--primary);background:white;color:var(--primary);min-height:48px;-webkit-tap-highlight-color:transparent;transition:background .2s ease,color .2s ease,transform .15s ease}
+.btn-save:active{transform:scale(.97)}
+.btn-save.saved{background:var(--green-bg);border-color:var(--green);color:var(--green);cursor:default}
+.btn-save svg{width:18px;height:18px;flex-shrink:0}
+.saved-count{font-size:.75rem;color:var(--text-sec);text-align:center;white-space:nowrap}
+
+.timeline-section{margin-bottom:1.2rem}
+.timeline-title{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-sec);margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.timeline-title svg{width:16px;height:16px}
+.timeline-canvas-wrap{position:relative;width:100%;height:200px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.timeline-canvas-wrap canvas{width:100%;height:100%;display:block}
+.btn-clear-history{display:block;margin:.4rem auto 0;font-size:.72rem;color:var(--text-sec);background:none;border:none;cursor:pointer;text-decoration:underline;opacity:.6;font-family:var(--font-b)}
+.btn-clear-history:hover{opacity:1;color:#C0392B}
+
+.export-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1rem}
+.btn-export{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem 1rem;font-family:var(--font-b);font-size:.88rem;font-weight:600;border-radius:100px;cursor:pointer;border:none;min-height:48px;-webkit-tap-highlight-color:transparent;transition:transform .15s ease}
+.btn-export:active{transform:scale(.97)}
+.btn-export svg{width:18px;height:18px;flex-shrink:0}
+.btn-export-pdf{background:#C0392B;color:white;box-shadow:0 2px 8px rgba(192,57,43,.25)}
+.btn-export-copy{background:var(--primary-light);color:var(--primary-dark);border:1px solid rgba(45,106,142,.15)}
+.btn-export-copy.copied{background:var(--green-bg);color:var(--green);border-color:rgba(52,168,83,.3)}
+.btn-new{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.85rem;font-family:var(--font-b);font-size:.95rem;font-weight:600;color:var(--text-sec);background:var(--surface);border:2px solid var(--border);border-radius:100px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* Footer */
+.app-footer{max-width:560px;margin:0 auto;padding:1.5rem 1rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--text-sec);line-height:1.7;text-align:center}
+.app-footer p{margin-bottom:.5rem}
+.app-footer .ref{font-weight:600}
+.app-footer .privacy{display:flex;align-items:center;justify-content:center;gap:.35rem;font-style:italic;margin-top:.3rem}
+.app-footer .privacy svg{width:14px;height:14px;flex-shrink:0;opacity:.5}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.fade-in{animation:fadeIn .35s ease both}
+@media(max-width:380px){.tick{width:28px;height:28px;font-size:.78rem}.wizard-question{font-size:1rem}}
+</style>
+</head>
+<body>
+<a href="#mainContent" class="skip-link" id="skipLink">Ir al contenido principal</a>
+
+<!-- Language bar -->
+<nav class="lang-bar" role="navigation" aria-label="Selector de idioma">
+  <button class="lang-btn active" id="langEs" onclick="setLang('es')" aria-pressed="true" aria-label="Español">ES</button>
+  <button class="lang-btn" id="langEn" onclick="setLang('en')" aria-pressed="false" aria-label="English">EN</button>
+</nav>
+
+<!-- SCREEN 1: WELCOME -->
+<div class="screen welcome active" id="screenWelcome" role="main" id="mainContent">
+  <div class="welcome-card fade-in">
+    <div class="welcome-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+    </div>
+    <h1>PsAID-12</h1>
+    <p class="subtitle" data-i18n="subtitle"></p>
+    <div class="welcome-info" data-i18n="welcomeInfo"></div>
+    <div class="welcome-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-i18n="time3min"></span></span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span data-i18n="q12"></span></span>
+    </div>
+    <!-- QR for desktop -->
+    <div class="qr-section" id="qrSection"><canvas id="qrCanvas" width="160" height="160" aria-label="QR code to open on mobile"></canvas><div class="qr-label" data-i18n="qrLabel"></div></div>
+    <button class="btn-start" onclick="startWizard()" data-i18n-aria="startBtn">
+      <span data-i18n="startBtn"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- SCREEN 2: WIZARD -->
+<div class="screen wizard" id="screenWizard">
+  <div class="wizard-top" role="status" aria-live="polite">
+    <div class="wizard-progress-label">
+      <span id="wizLabel"></span><span id="wizDomain"></span>
+    </div>
+    <div class="wizard-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="12" id="wizProgressBar">
+      <div class="wizard-progress-fill" id="wizFill" style="width:8.33%"></div>
+    </div>
+  </div>
+  <div class="wizard-body" id="wizBody" role="group" aria-labelledby="wizDomainTitle">
+    <div class="wizard-domain" id="wizDomainTitle"></div>
+    <p class="wizard-question" id="wizQuestion"></p>
+    <div class="big-value"><div class="big-value-num" id="wizBigNum" aria-live="polite" aria-atomic="true">5</div></div>
+    <div class="slider-area">
+      <div class="slider-anchors-top"><span class="anchor-label left" id="wizAnchorL"></span><span class="anchor-label right" id="wizAnchorR"></span></div>
+      <input type="range" class="big-slider" min="0" max="10" value="5" step="1" id="wizSlider" oninput="onWizSliderInput()" aria-label="Score" aria-valuemin="0" aria-valuemax="10">
+      <div class="slider-anchor-row"><span class="anchor-end">0</span><span class="anchor-end">10</span></div>
+      <div class="slider-ticks" id="wizTicks" role="group" aria-label="Quick select value"></div>
+    </div>
+  </div>
+  <div class="wizard-nav">
+    <button class="btn-nav btn-prev" id="btnPrev" onclick="wizPrev()" aria-label="Previous question">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 12H5m7-7l-7 7 7 7"/></svg><span data-i18n="prevBtn"></span>
+    </button>
+    <button class="btn-nav btn-next" id="btnNext" onclick="wizNext()">
+      <span id="nextLabel" data-i18n="nextBtn"></span><svg id="nextIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- SCREEN 3: REVIEW -->
+<div class="screen review" id="screenReview">
+  <div class="review-top"><h2 data-i18n="reviewTitle"></h2><p data-i18n="reviewSub"></p></div>
+  <div class="review-list" id="reviewList" role="list"></div>
+  <div class="review-actions">
+    <button class="btn-calculate" onclick="calcular()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12h16m-8-8l8 8-8 8"/></svg><span data-i18n="calculateBtn"></span>
+    </button>
+    <button class="btn-back-edit" onclick="goToQuestion(0)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M19 12H5m7-7l-7 7 7 7"/></svg><span data-i18n="backEditBtn"></span>
+    </button>
+  </div>
+</div>
+
+<!-- SCREEN 4: RESULT -->
+<div class="screen result-screen" id="screenResult">
+  <div class="result-header" id="resultHeader">
+    <div class="result-score-big" id="resultScoreBig" aria-live="polite">—</div>
+    <div class="result-scale-label" data-i18n="scaleLabel"></div>
+    <div id="resultBadgeArea" aria-live="polite"></div>
+    <p class="result-message" id="resultMessage"></p>
+  </div>
+  <div class="result-body">
+    <div class="priority-box fade-in" id="priorityBox" role="region" aria-label="Priority domains"></div>
+    <div class="comparison-box fade-in" id="comparisonBox" style="display:none" role="region" aria-label="Comparison"></div>
+    <div class="result-radar"><div class="result-radar-title" data-i18n="radarTitle"></div><div class="radar-wrapper"><canvas id="radarCanvas" role="img" aria-label="Radar chart"></canvas></div></div>
+    <div class="result-cutoff" data-i18n="cutoffLabel"></div>
+    <button class="detail-toggle" id="detailToggle" onclick="toggleDetails()" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg><span data-i18n="detailToggle"></span>
+    </button>
+    <div class="detail-table" id="detailTable" role="region" aria-label="Domain detail"></div>
+    <div class="save-area" id="saveArea">
+      <button class="btn-save" id="btnSave" onclick="saveResult()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span id="saveLabel" data-i18n="saveBtn"></span>
+      </button>
+      <span class="saved-count" id="savedCount"></span>
+    </div>
+    <div class="timeline-section" id="timelineSection" style="display:none">
+      <div class="timeline-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span data-i18n="timelineTitle"></span></div>
+      <div class="timeline-canvas-wrap"><canvas id="timelineCanvas" role="img" aria-label="Timeline chart"></canvas></div>
+      <button class="btn-clear-history" onclick="clearHistory()" data-i18n="clearHistory"></button>
+    </div>
+    <div class="export-actions">
+      <button class="btn-export btn-export-pdf" onclick="exportPDF()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>PDF
+      </button>
+      <button class="btn-export btn-export-copy" id="btnCopy" onclick="copyToClipboard()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><span id="copyLabel" data-i18n="copyBtn"></span>
+      </button>
+    </div>
+    <button class="btn-new" onclick="resetAll()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10"/></svg><span data-i18n="newBtn"></span>
+    </button>
+  </div>
+  <footer class="app-footer" role="contentinfo">
+    <p class="ref">PsAID-12 © EULAR. Gossec L et al. Ann Rheum Dis 2014;73:1012-1019</p>
+    <p data-i18n="footerDisclaimer"></p>
+    <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><span data-i18n="footerPrivacy"></span></p>
+  </footer>
+</div>
+
+<script>
+// ================================================================
+// i18n
+// ================================================================
+const I18N = {
+es: {
+  subtitle:'Cuestionario de Impacto de la Artritis Psoriásica',
+  welcomeInfo:'Este cuestionario tiene 12 preguntas y le llevará aproximadamente 3 minutos. Sus respuestas nos ayudarán a entender mejor cómo le afecta su enfermedad.',
+  time3min:'~3 min',q12:'12 preguntas',
+  qrLabel:'Escanee para abrir en su móvil',
+  startBtn:'Comenzar',prevBtn:'Anterior',nextBtn:'Siguiente',reviewBtn:'Revisar',
+  reviewTitle:'Revise sus respuestas',reviewSub:'Pulse sobre cualquier pregunta para modificarla',
+  calculateBtn:'Calcular resultado',backEditBtn:'Volver a editar',
+  scaleLabel:'de 10 puntos · PsAID-12',
+  badgeAcceptable:'Estado sintomático aceptable',badgeSignificant:'Impacto significativo',
+  msgAcceptable:'La puntuación se encuentra por debajo del punto de corte PASS (< 4), lo que indica un estado sintomático aceptable para el paciente.',
+  msgSignificant:'La puntuación es igual o superior al punto de corte PASS (≥ 4), lo que indica un impacto significativo de la enfermedad. Considerar valoración clínica.',
+  priorityTitle:'Áreas de mayor impacto',priorityNote:'Considerar intervención específica en estos dominios.',
+  compTitle:'Comparación con visita anterior',compCurrent:'Actual',compPrevious:'Anterior',compChange:'Cambio',
+  compImprovedMCID:'↓ Mejora de {v} puntos. Cambio clínicamente importante (MCID ≥ 3).',
+  compImproved:'↓ Mejora de {v} puntos, pero no alcanza el cambio mínimo clínicamente importante (MCID ≥ 3).',
+  compWorsenedMCID:'↑ Empeoramiento de {v} puntos. Cambio clínicamente importante (MCID ≥ 3).',
+  compWorsened:'↑ Empeoramiento de {v} puntos, por debajo del cambio mínimo clínicamente importante (MCID ≥ 3).',
+  compStable:'Sin cambios respecto a la medición anterior.',
+  radarTitle:'Perfil por dominio',cutoffLabel:'Punto de corte PASS (Patient Acceptable Symptom State) = 4',
+  detailToggle:'Ver detalle por dominio',saveBtn:'Guardar este resultado',savedBtn:'✓ Resultado guardado',
+  timelineTitle:'Evolución PsAID-12',clearHistory:'Borrar historial',clearConfirm:'¿Borrar todo el historial de resultados PsAID-12 guardados en este navegador?',
+  copyBtn:'Copiar',copiedBtn:'¡Copiado! ✓',newBtn:'Nuevo cuestionario',editHint:'editar ›',
+  questionLabel:'Pregunta {n} de 12',
+  footerDisclaimer:'Esta herramienta digital es un apoyo para la recogida de resultados percibidos por el paciente. No sustituye la valoración clínica profesional.',
+  footerPrivacy:'Los datos introducidos se almacenan únicamente en su dispositivo y no se envían a ningún servidor.',
+  skipLink:'Ir al contenido principal',
+  records:'registro',recordsPlural:'registros',
+  pdfTitle:'Informe PsAID-12 — Impacto de la Artritis Psoriásica',
+  pdfSubtitle:'EULAR · Práctica Clínica',
+  pdfDetail:'Detalle por dominio',pdfTotal:'TOTAL',pdfRadar:'Perfil gráfico por dominio',pdfTop3:'Dominios más afectados:',
+  pdfFooter:'Cuestionario PsAID-12 desarrollado por EULAR (Gossec et al., Ann Rheum Dis 2014). Herramienta generada con fines de apoyo clínico.',
+  questions:[
+    {domain:"Dolor",short:"Dolor",text:"Rodee con un círculo el número que mejor describa el dolor que ha sentido debido a su artritis psoriásica durante la última semana",aL:"Sin dolor",aR:"Dolor insuperable"},
+    {domain:"Fatiga/Cansancio",short:"Fatiga",text:"Rodee con un círculo el número que mejor describa la sensación de fatiga o cansancio que ha sentido debido a su artritis psoriásica durante la última semana",aL:"Nada fatigado/a",aR:"Totalmente agotado/a"},
+    {domain:"Problemas de la piel",short:"Piel",text:"Rodee con un círculo el número que mejor describa los problemas de la piel, incluyendo picor, que ha sentido debido a su artritis psoriásica durante la última semana",aL:"Sin problemas",aR:"Problemas insuperables"},
+    {domain:"Trabajo y/o actividades de ocio",short:"Trabajo/Ocio",text:"Rodee con un círculo el número que mejor describa las dificultades que ha tenido para desarrollar completamente su trabajo y/o participar en actividades de ocio debido a su artritis psoriásica durante la última semana",aL:"Sin dificultad",aR:"Dificultad insuperable"},
+    {domain:"Capacidad funcional",short:"Función",text:"Rodee con un círculo el número que mejor describa la dificultad que ha tenido para hacer las actividades físicas cotidianas debido a su artritis psoriásica durante la última semana",aL:"Sin dificultad",aR:"Dificultad insuperable"},
+    {domain:"Sensación de incomodidad",short:"Incomodidad",text:"Rodee con un círculo el número que mejor describa la sensación de incomodidad y/o irritación que ha sentido debido a su artritis psoriásica",aL:"Ninguna",aR:"Insuperable"},
+    {domain:"Dificultad para dormir",short:"Sueño",text:"Rodee con un círculo el número que mejor describa su dificultad para dormir (es decir, para descansar por la noche) debido a su artritis psoriásica durante la última semana",aL:"Sin dificultad",aR:"Dificultad insuperable"},
+    {domain:"Afrontamiento",short:"Afrontamiento",text:"Teniendo en cuenta su artritis psoriásica en general, ¿Qué tal ha conseguido afrontar, conllevar, sobrellevar o hacerse cargo de su enfermedad durante la última semana?",aL:"Muy bien",aR:"Muy mal"},
+    {domain:"Ansiedad, miedo e incertidumbre",short:"Ansiedad",text:"Rodee con un círculo el número que mejor describa el nivel de ansiedad, miedo e incertidumbre (por ejemplo a: futuro incierto, tratamiento, miedo a la soledad) que ha sentido debido a su artritis psoriásica durante la última semana",aL:"Ninguna",aR:"Insuperable"},
+    {domain:"Apuro y/o vergüenza",short:"Vergüenza",text:"Teniendo en cuenta su artritis psoriásica en general, rodee con un círculo el número que mejor describa el nivel de apuro y/o vergüenza por su apariencia que ha sentido debido a su artritis psoriásica durante la última semana",aL:"Ninguno",aR:"Insuperable"},
+    {domain:"Participación social",short:"Social",text:"Rodee con un círculo el número que mejor describa las dificultades que ha tenido para participar de forma satisfactoria en actividades sociales (incluyendo las relaciones con la familia y/o gente muy cercana) debido a su artritis psoriásica durante la última semana",aL:"Ninguna dificultad",aR:"Insuperable"},
+    {domain:"Depresión",short:"Depresión",text:"Rodee con un círculo el número que mejor describa su nivel de depresión (sentimiento de tristeza o estar depresivo) debido a su artritis psoriásica durante la última semana",aL:"Ninguna",aR:"Insuperable"}
+  ]
+},
+en: {
+  subtitle:'Psoriatic Arthritis Impact of Disease Questionnaire',
+  welcomeInfo:'This questionnaire has 12 questions and will take approximately 3 minutes. Your answers will help us better understand how your disease affects you.',
+  time3min:'~3 min',q12:'12 questions',
+  qrLabel:'Scan to open on your phone',
+  startBtn:'Start',prevBtn:'Previous',nextBtn:'Next',reviewBtn:'Review',
+  reviewTitle:'Review your answers',reviewSub:'Tap any question to change it',
+  calculateBtn:'Calculate result',backEditBtn:'Go back to edit',
+  scaleLabel:'out of 10 points · PsAID-12',
+  badgeAcceptable:'Acceptable symptom state',badgeSignificant:'Significant impact',
+  msgAcceptable:'The score is below the PASS cut-off (< 4), indicating a patient acceptable symptom state.',
+  msgSignificant:'The score is equal to or above the PASS cut-off (≥ 4), indicating significant disease impact. Consider clinical assessment.',
+  priorityTitle:'Areas of greatest impact',priorityNote:'Consider targeted intervention in these domains.',
+  compTitle:'Comparison with previous visit',compCurrent:'Current',compPrevious:'Previous',compChange:'Change',
+  compImprovedMCID:'↓ Improvement of {v} points. Clinically important change (MCID ≥ 3).',
+  compImproved:'↓ Improvement of {v} points, but does not reach the minimal clinically important difference (MCID ≥ 3).',
+  compWorsenedMCID:'↑ Worsening of {v} points. Clinically important change (MCID ≥ 3).',
+  compWorsened:'↑ Worsening of {v} points, below the minimal clinically important difference (MCID ≥ 3).',
+  compStable:'No change from previous measurement.',
+  radarTitle:'Profile by domain',cutoffLabel:'PASS cut-off (Patient Acceptable Symptom State) = 4',
+  detailToggle:'View domain detail',saveBtn:'Save this result',savedBtn:'✓ Result saved',
+  timelineTitle:'PsAID-12 over time',clearHistory:'Clear history',clearConfirm:'Delete all saved PsAID-12 results from this browser?',
+  copyBtn:'Copy',copiedBtn:'Copied! ✓',newBtn:'New questionnaire',editHint:'edit ›',
+  questionLabel:'Question {n} of 12',
+  footerDisclaimer:'This digital tool supports the collection of patient-reported outcomes. It does not replace professional clinical assessment.',
+  footerPrivacy:'Data entered is stored only on your device and is not sent to any server.',
+  skipLink:'Skip to main content',
+  records:'record',recordsPlural:'records',
+  pdfTitle:'PsAID-12 Report — Psoriatic Arthritis Impact of Disease',
+  pdfSubtitle:'EULAR · Clinical Practice',
+  pdfDetail:'Detail by domain',pdfTotal:'TOTAL',pdfRadar:'Graphic profile by domain',pdfTop3:'Most affected domains:',
+  pdfFooter:'PsAID-12 questionnaire developed by EULAR (Gossec et al., Ann Rheum Dis 2014). Tool generated for clinical support.',
+  questions:[
+    {domain:"Pain",short:"Pain",text:"Please circle the number that best describes the pain you felt due to your psoriatic arthritis in the last week",aL:"No pain",aR:"Unbearable pain"},
+    {domain:"Fatigue",short:"Fatigue",text:"Please circle the number that best describes the fatigue you felt due to your psoriatic arthritis in the last week",aL:"No fatigue",aR:"Totally exhausted"},
+    {domain:"Skin problems",short:"Skin",text:"Please circle the number that best describes the skin problems, including itching, you felt due to your psoriatic arthritis in the last week",aL:"No skin problems",aR:"Unbearable skin problems"},
+    {domain:"Work and/or leisure activities",short:"Work/Leisure",text:"Please circle the number that best describes the difficulty you had in carrying out your work and/or leisure activities due to your psoriatic arthritis in the last week",aL:"No difficulty",aR:"Unbearable difficulty"},
+    {domain:"Functional capacity",short:"Function",text:"Please circle the number that best describes the difficulty you had in doing physical activities in daily life due to your psoriatic arthritis in the last week",aL:"No difficulty",aR:"Unbearable difficulty"},
+    {domain:"Discomfort",short:"Discomfort",text:"Please circle the number that best describes the feeling of discomfort and/or annoyance you felt due to your psoriatic arthritis",aL:"None",aR:"Unbearable"},
+    {domain:"Sleep disturbance",short:"Sleep",text:"Please circle the number that best describes your difficulty in sleeping (i.e. resting at night) due to your psoriatic arthritis in the last week",aL:"No difficulty",aR:"Unbearable difficulty"},
+    {domain:"Coping",short:"Coping",text:"Considering your psoriatic arthritis overall, how well did you cope with (manage, deal with) your disease in the last week?",aL:"Very well",aR:"Very poorly"},
+    {domain:"Anxiety, fear and uncertainty",short:"Anxiety",text:"Please circle the number that best describes the level of anxiety, fear and uncertainty you felt due to your psoriatic arthritis in the last week",aL:"None",aR:"Unbearable"},
+    {domain:"Embarrassment and/or shame",short:"Shame",text:"Considering your psoriatic arthritis overall, please circle the number that best describes the level of embarrassment and/or shame due to your appearance you felt in the last week",aL:"None",aR:"Unbearable"},
+    {domain:"Social participation",short:"Social",text:"Please circle the number that best describes the difficulty you had in participating satisfactorily in social activities due to your psoriatic arthritis in the last week",aL:"No difficulty",aR:"Unbearable"},
+    {domain:"Depression",short:"Depression",text:"Please circle the number that best describes the level of depression (feeling sad or depressed) you felt due to your psoriatic arthritis in the last week",aL:"None",aR:"Unbearable"}
+  ]
+}
+};
+
+let lang = 'es';
+function T(key) { return I18N[lang][key] || key; }
+function Q() { return I18N[lang].questions; }
+
+function setLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  document.getElementById('langEs').classList.toggle('active', l==='es');
+  document.getElementById('langEn').classList.toggle('active', l==='en');
+  document.getElementById('langEs').setAttribute('aria-pressed', l==='es');
+  document.getElementById('langEn').setAttribute('aria-pressed', l==='en');
+  document.getElementById('skipLink').textContent = T('skipLink');
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T(key)) el.textContent = T(key);
+  });
+  // If wizard is active, re-render current question
+  if (document.getElementById('screenWizard').classList.contains('active')) renderQuestion();
+  // If review is active, re-render
+  if (document.getElementById('screenReview').classList.contains('active')) showReview();
+}
+
+// ================================================================
+// Core data
+// ================================================================
+const weights = [3,2,2,2,2,2,2,1,1,1,1,1];
+const TOTAL_WEIGHT = 20;
+const answers = new Array(12).fill(5);
+let currentQ = 0;
+
+// Navigation
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function startWizard() { currentQ=0; showScreen('screenWizard'); renderQuestion(); }
+function goToQuestion(idx) { currentQ=idx; showScreen('screenWizard'); renderQuestion(); }
+
+// Wizard
+function renderQuestion() {
+  const q = Q()[currentQ];
+  document.getElementById('wizLabel').textContent = T('questionLabel').replace('{n}',currentQ+1);
+  document.getElementById('wizDomain').textContent = q.short;
+  document.getElementById('wizFill').style.width = `${((currentQ+1)/12)*100}%`;
+  document.getElementById('wizProgressBar').setAttribute('aria-valuenow', currentQ+1);
+  document.getElementById('wizDomainTitle').textContent = q.domain;
+  document.getElementById('wizQuestion').textContent = q.text;
+  document.getElementById('wizAnchorL').textContent = q.aL;
+  document.getElementById('wizAnchorR').textContent = q.aR;
+  const slider = document.getElementById('wizSlider');
+  slider.value = answers[currentQ];
+  slider.setAttribute('aria-label', q.short);
+  slider.setAttribute('aria-valuenow', answers[currentQ]);
+  updateSliderVisual(answers[currentQ]);
+  const ticks = document.getElementById('wizTicks');
+  ticks.innerHTML = '';
+  for (let i=0;i<=10;i++) {
+    const t = document.createElement('button');
+    t.className = 'tick'+(i===answers[currentQ]?' active':'');
+    t.textContent = i;
+    t.setAttribute('aria-label', `${i}`);
+    t.onclick = () => setWizValue(i);
+    ticks.appendChild(t);
+  }
+  document.getElementById('btnPrev').disabled = (currentQ===0);
+  const nextLabel = document.getElementById('nextLabel');
+  const nextIcon = document.getElementById('nextIcon');
+  if (currentQ===11) {
+    nextLabel.textContent = T('reviewBtn');
+    nextIcon.innerHTML = '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>';
+  } else {
+    nextLabel.textContent = T('nextBtn');
+    nextIcon.innerHTML = '<path d="M5 12h14m-7-7l7 7-7 7"/>';
+  }
+  const body = document.getElementById('wizBody');
+  body.classList.remove('fade-in'); void body.offsetWidth; body.classList.add('fade-in');
+}
+
+function onWizSliderInput() { setWizValue(parseInt(document.getElementById('wizSlider').value)); }
+
+function setWizValue(val) {
+  answers[currentQ]=val;
+  const slider = document.getElementById('wizSlider');
+  slider.value=val;
+  slider.setAttribute('aria-valuenow', val);
+  updateSliderVisual(val);
+  document.querySelectorAll('#wizTicks .tick').forEach((t,i)=>t.classList.toggle('active',i===val));
+}
+
+function updateSliderVisual(val) {
+  const bigNum = document.getElementById('wizBigNum');
+  bigNum.textContent=val;
+  bigNum.classList.remove('bounce'); void bigNum.offsetWidth; bigNum.classList.add('bounce');
+  const pct=(val/10)*100;
+  document.getElementById('wizSlider').style.background=`linear-gradient(to right,var(--primary) 0%,var(--primary) ${pct}%,var(--track) ${pct}%,var(--track) 100%)`;
+}
+
+function wizPrev() { if(currentQ>0){currentQ--;renderQuestion();} }
+function wizNext() { if(currentQ<11){currentQ++;renderQuestion();}else{showReview();} }
+
+// Keyboard: left/right arrows for slider
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('screenWizard').classList.contains('active')) return;
+  if (e.key==='ArrowLeft'&&answers[currentQ]>0) setWizValue(answers[currentQ]-1);
+  if (e.key==='ArrowRight'&&answers[currentQ]<10) setWizValue(answers[currentQ]+1);
+});
+
+// Review
+function showReview() {
+  showScreen('screenReview');
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  Q().forEach((q,i) => {
+    const val=answers[i], pct=(val/10)*100;
+    const barColor = val>6?'var(--accent)':val>3?'#E8A84C':'#34A853';
+    const item = document.createElement('div');
+    item.className='review-item fade-in';
+    item.setAttribute('role','listitem');
+    item.setAttribute('tabindex','0');
+    item.setAttribute('aria-label',`${q.short}: ${val}/10. ${T('editHint')}`);
+    item.style.animationDelay=`${i*.03}s`;
+    item.onclick=()=>goToQuestion(i);
+    item.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();goToQuestion(i);}};
+    item.innerHTML=`<div class="review-num">${i+1}</div><div class="review-info"><div class="review-domain">${q.short}</div><div class="review-val"><div class="review-bar"><div class="review-bar-fill" style="width:${pct}%;background:${barColor}"></div></div><div class="review-score">${val}</div></div></div><div class="review-edit-hint">${T('editHint')}</div>`;
+    list.appendChild(item);
+  });
+}
+
+// ================================================================
+// Calculate + Priority + Comparison
+// ================================================================
+let currentScore=null, currentSaved=false;
+
+function calcular() {
+  let ws=0; for(let i=0;i<12;i++) ws+=answers[i]*weights[i];
+  const score=ws/TOTAL_WEIGHT, scoreR=Math.round(score*10)/10, isAcc=score<4;
+  currentScore=scoreR; currentSaved=false;
+
+  showScreen('screenResult');
+  document.getElementById('resultScoreBig').textContent=scoreR.toFixed(1);
+  document.getElementById('resultScoreBig').className='result-score-big '+(isAcc?'green':'orange');
+  document.getElementById('resultHeader').className='result-header '+(isAcc?'acceptable':'significant');
+
+  const ba=document.getElementById('resultBadgeArea');
+  if(isAcc){
+    ba.innerHTML=`<div class="result-badge acceptable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>${T('badgeAcceptable')}</div>`;
+    document.getElementById('resultMessage').textContent=T('msgAcceptable');
+  } else {
+    ba.innerHTML=`<div class="result-badge significant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>${T('badgeSignificant')}</div>`;
+    document.getElementById('resultMessage').textContent=T('msgSignificant');
+  }
+
+  renderPriorityDomains();
+  renderComparison(scoreR);
+  setTimeout(()=>drawRadarChart([...answers],isAcc),100);
+  buildDetailTable([...answers]);
+  document.getElementById('detailTable').classList.remove('visible');
+  document.getElementById('detailToggle').classList.remove('open');
+  document.getElementById('detailToggle').setAttribute('aria-expanded','false');
+  document.getElementById('btnSave').classList.remove('saved');
+  document.getElementById('saveLabel').textContent=T('saveBtn');
+  renderTimeline();
+  updateSavedCount();
+}
+
+function renderPriorityDomains() {
+  const ranked=[...answers].map((v,i)=>({idx:i,name:Q()[i].short,fullName:Q()[i].domain,value:v})).sort((a,b)=>b.value-a.value);
+  const top3=ranked.slice(0,3);
+  const box=document.getElementById('priorityBox');
+  let h=`<div class="priority-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>${T('priorityTitle')}</div>`;
+  top3.forEach(d=>{
+    const dc=d.value>6?'var(--accent)':d.value>3?'#E8A84C':'#34A853';
+    h+=`<div class="priority-item"><div class="priority-dot" style="background:${dc}"></div><span class="priority-name">${d.fullName}</span><span class="priority-val">${d.value}/10</span></div>`;
+  });
+  h+=`<div class="priority-note">${T('priorityNote')}</div>`;
+  box.innerHTML=h;
+}
+
+function renderComparison(scoreR) {
+  const hist=getHistory(), box=document.getElementById('comparisonBox');
+  if(!hist.length){box.style.display='none';return;}
+  box.style.display='block';
+  const prev=hist[hist.length-1], diff=Math.round((scoreR-prev.score)*10)/10, absDiff=Math.abs(diff);
+  const prevDate=new Date(prev.date).toLocaleDateString(lang==='es'?'es-ES':'en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  const cA=scoreR<4, pA=prev.score<4;
+  let vc,vt;
+  if(diff<0){vc='improved';vt=absDiff>=3?T('compImprovedMCID').replace('{v}',absDiff.toFixed(1)):T('compImproved').replace('{v}',absDiff.toFixed(1));}
+  else if(diff>0){vc='worsened';vt=absDiff>=3?T('compWorsenedMCID').replace('{v}',absDiff.toFixed(1)):T('compWorsened').replace('{v}',absDiff.toFixed(1));}
+  else{vc='stable';vt=T('compStable');}
+  box.innerHTML=`<div class="comparison-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>${T('compTitle')}</div>
+    <div class="comparison-row"><div class="comparison-cell"><div class="comparison-cell-label">${T('compCurrent')}</div><div class="comparison-cell-val ${cA?'green':'orange'}">${scoreR.toFixed(1)}</div></div><div class="comparison-cell"><div class="comparison-cell-label">${T('compPrevious')}</div><div class="comparison-cell-val primary">${prev.score.toFixed(1)}</div><div class="comparison-cell-date">${prevDate}</div></div><div class="comparison-cell"><div class="comparison-cell-label">${T('compChange')}</div><div class="comparison-cell-val ${diff<0?'green':diff>0?'orange':'primary'}">${diff>0?'+':''}${diff.toFixed(1)}</div></div></div>
+    <div class="comparison-verdict ${vc}">${vt}</div>`;
+}
+
+// localStorage
+const STORAGE_KEY='psaid12_history';
+function getHistory(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){return[];}}
+
+function saveResult(){
+  if(currentSaved||currentScore===null)return;
+  const h=getHistory();
+  h.push({date:new Date().toISOString(),score:currentScore,domains:[...answers]});
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(h));}catch(e){alert('Storage error');return;}
+  currentSaved=true;
+  document.getElementById('btnSave').classList.add('saved');
+  document.getElementById('saveLabel').textContent=T('savedBtn');
+  updateSavedCount(); renderTimeline();
+}
+
+function updateSavedCount(){
+  const h=getHistory(),el=document.getElementById('savedCount');
+  el.textContent=h.length>0?`${h.length} ${h.length>1?T('recordsPlural'):T('records')}`:'';
+}
+
+function clearHistory(){
+  if(!confirm(T('clearConfirm')))return;
+  localStorage.removeItem(STORAGE_KEY);
+  renderTimeline(); updateSavedCount();
+  document.getElementById('comparisonBox').style.display='none';
+}
+
+function buildDetailTable(values){
+  const c=document.getElementById('detailTable');
+  let h='',tw=0;
+  for(let i=0;i<12;i++){const v=values[i],w=v*weights[i];tw+=w;const pct=(v/10)*100;const bc=v>6?'var(--accent)':v>3?'#E8A84C':'#34A853';
+  h+=`<div class="detail-row"><span class="detail-domain">${i+1}. ${Q()[i].short}</span><span class="detail-weight">×${weights[i]}</span><span class="detail-bar-wrap"><span class="detail-bar-fill" style="width:${pct}%;background:${bc}"></span></span><span class="detail-val">${v}</span></div>`;}
+  h+=`<div class="detail-row" style="font-weight:700;padding-top:.6rem;border-top:1px solid var(--border);margin-top:.3rem;"><span class="detail-domain">${T('pdfTotal')}</span><span class="detail-weight"></span><span class="detail-bar-wrap" style="background:none;text-align:center;font-size:.75rem;color:var(--text-sec);">÷ ${TOTAL_WEIGHT}</span><span class="detail-val">${tw.toFixed(1)}</span></div>`;
+  c.innerHTML=h;
+}
+
+function toggleDetails(){
+  document.getElementById('detailTable').classList.toggle('visible');
+  const btn=document.getElementById('detailToggle');
+  btn.classList.toggle('open');
+  btn.setAttribute('aria-expanded', btn.classList.contains('open'));
+}
+
+function resetAll(){answers.fill(5);currentQ=0;showScreen('screenWelcome');}
+
+// ================================================================
+// Radar chart
+// ================================================================
+function drawRadarChart(values,isAcceptable){
+  const canvas=document.getElementById('radarCanvas'),wrapper=canvas.parentElement;
+  const dpr=window.devicePixelRatio||1,rect=wrapper.getBoundingClientRect(),size=Math.floor(rect.width);
+  canvas.width=size*dpr;canvas.height=size*dpr;canvas.style.width=size+'px';canvas.style.height=size+'px';
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  const cx=size/2,cy=size/2,lm=size<340?48:size<400?56:62,maxR=cx-lm,rings=5,n=12;
+  const step=(2*Math.PI)/n,start=-Math.PI/2;
+  const rl=Q().map(q=>q.short);
+  const fc=isAcceptable?'rgba(52,168,83,.18)':'rgba(212,118,58,.18)';
+  const sc=isAcceptable?'rgba(52,168,83,.7)':'rgba(212,118,58,.7)';
+  const dc=isAcceptable?'rgba(26,122,52,.9)':'rgba(160,82,26,.9)';
+  const dg=isAcceptable?'rgba(52,168,83,.25)':'rgba(212,118,58,.25)';
+  const passR=(4/10)*maxR;
+  ctx.clearRect(0,0,size,size);
+  for(let r=rings;r>=1;r--){const rd=(r/rings)*maxR;ctx.beginPath();for(let i=0;i<=n;i++){const a=start+i*step,x=cx+Math.cos(a)*rd,y=cy+Math.sin(a)*rd;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.closePath();ctx.fillStyle=r%2===0?'rgba(247,245,240,.6)':'rgba(255,255,255,.8)';ctx.fill();}
+  for(let r=1;r<=rings;r++){const rd=(r/rings)*maxR;ctx.beginPath();for(let i=0;i<=n;i++){const a=start+i*step,x=cx+Math.cos(a)*rd,y=cy+Math.sin(a)*rd;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.closePath();ctx.strokeStyle=r===rings?'#D9D5CC':'#EDEBE6';ctx.lineWidth=r===rings?1.2:.7;ctx.stroke();}
+  ctx.beginPath();for(let i=0;i<=n;i++){const a=start+i*step,x=cx+Math.cos(a)*passR,y=cy+Math.sin(a)*passR;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.closePath();ctx.setLineDash([4,4]);ctx.strokeStyle='rgba(180,80,40,.4)';ctx.lineWidth=1.2;ctx.stroke();ctx.setLineDash([]);
+  const pla=start+.5*step;ctx.font=`600 ${size<340?7:9}px 'DM Sans',sans-serif`;ctx.fillStyle='rgba(160,82,26,.6)';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText('PASS=4',cx+Math.cos(pla)*(passR+6),cy+Math.sin(pla)*(passR+6));
+  for(let i=0;i<n;i++){const a=start+i*step;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*maxR,cy+Math.sin(a)*maxR);ctx.strokeStyle='#C5C0B6';ctx.lineWidth=.5;ctx.stroke();}
+  ctx.font=`500 ${size<340?7:9}px 'DM Sans',sans-serif`;ctx.fillStyle='#A8A29E';ctx.textAlign='right';ctx.textBaseline='middle';
+  for(let r=1;r<=rings;r++){const rd=(r/rings)*maxR;ctx.fillText(r*2,cx+Math.cos(start)*rd-5,cy+Math.sin(start)*rd);}
+  ctx.beginPath();for(let i=0;i<n;i++){const a=start+i*step,r=(values[i]/10)*maxR,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.closePath();ctx.fillStyle=fc;ctx.fill();ctx.strokeStyle=sc;ctx.lineWidth=2;ctx.stroke();
+  for(let i=0;i<n;i++){const a=start+i*step,r=(values[i]/10)*maxR,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;ctx.beginPath();ctx.arc(x,y,5,0,2*Math.PI);ctx.fillStyle=dg;ctx.fill();ctx.beginPath();ctx.arc(x,y,3,0,2*Math.PI);ctx.fillStyle=dc;ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();}
+  const lfs=size<340?8.5:size<400?10:11,vfs=size<340?7.5:size<400?9:10,ld=maxR+(size<340?16:22);
+  for(let i=0;i<n;i++){const a=start+i*step,lx=cx+Math.cos(a)*ld,ly=cy+Math.sin(a)*ld,deg=((a*180/Math.PI)+360)%360;
+  let ta='center';if(deg>20&&deg<160)ta='left';else if(deg>200&&deg<340)ta='right';
+  let tb='middle';if(deg>250&&deg<290)tb='bottom';if(deg>70&&deg<110)tb='top';
+  ctx.textAlign=ta;ctx.textBaseline=tb;ctx.font=`500 ${lfs}px 'DM Sans',sans-serif`;ctx.fillStyle='#5A5A5A';ctx.fillText(rl[i],lx,ly);
+  const vOff=tb==='bottom'?-lfs-2:lfs+2;ctx.font=`700 ${vfs}px 'DM Sans',sans-serif`;ctx.fillStyle='#2C2C2C';ctx.fillText(values[i],lx,ly+vOff);}
+  ctx.beginPath();ctx.arc(cx,cy,2.5,0,2*Math.PI);ctx.fillStyle='#C5C0B6';ctx.fill();
+}
+
+// ================================================================
+// Timeline chart
+// ================================================================
+function renderTimeline(){
+  const history=getHistory(),section=document.getElementById('timelineSection');
+  if(history.length<1){section.style.display='none';return;}
+  section.style.display='block';
+  const canvas=document.getElementById('timelineCanvas'),wrap=canvas.parentElement;
+  const dpr=window.devicePixelRatio||1,rect=wrap.getBoundingClientRect();
+  const W=Math.floor(rect.width),H=Math.floor(rect.height);
+  canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+'px';canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  const padL=36,padR=16,padT=20,padB=40,cW=W-padL-padR,cH=H-padT-padB;
+  ctx.clearRect(0,0,W,H);
+  ctx.font="500 10px 'DM Sans',sans-serif";ctx.textAlign='right';ctx.textBaseline='middle';
+  for(let v=0;v<=10;v+=2){const y=padT+cH-(v/10)*cH;ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+cW,y);ctx.strokeStyle='#EDEBE6';ctx.lineWidth=.7;ctx.stroke();ctx.fillStyle='#A8A29E';ctx.fillText(v,padL-6,y);}
+  const passY=padT+cH-(4/10)*cH;ctx.beginPath();ctx.moveTo(padL,passY);ctx.lineTo(padL+cW,passY);ctx.setLineDash([5,4]);ctx.strokeStyle='rgba(180,80,40,.5)';ctx.lineWidth=1.2;ctx.stroke();ctx.setLineDash([]);
+  ctx.font="600 9px 'DM Sans',sans-serif";ctx.fillStyle='rgba(160,82,26,.6)';ctx.textAlign='left';ctx.fillText('PASS=4',padL+cW-42,passY-7);
+  const pts=history.map((h,i)=>{const x=history.length===1?padL+cW/2:padL+(i/(history.length-1))*cW;const y=padT+cH-(h.score/10)*cH;return{x,y,score:h.score,date:h.date};});
+  if(pts.length>1){ctx.beginPath();ctx.moveTo(pts[0].x,padT+cH);pts.forEach(p=>ctx.lineTo(p.x,p.y));ctx.lineTo(pts[pts.length-1].x,padT+cH);ctx.closePath();const grad=ctx.createLinearGradient(0,padT,0,padT+cH);grad.addColorStop(0,'rgba(45,106,142,.15)');grad.addColorStop(1,'rgba(45,106,142,.02)');ctx.fillStyle=grad;ctx.fill();}
+  if(pts.length>1){ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.strokeStyle='rgba(45,106,142,.8)';ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.stroke();}
+  const dateLoc=lang==='es'?'es-ES':'en-GB';
+  pts.forEach((p,i)=>{const isA=p.score<4,dotC=isA?'#1A7A34':'#A0521A',bgC=isA?'rgba(230,247,236,.8)':'rgba(253,240,231,.8)';
+  ctx.beginPath();ctx.arc(p.x,p.y,7,0,2*Math.PI);ctx.fillStyle=bgC;ctx.fill();
+  ctx.beginPath();ctx.arc(p.x,p.y,4.5,0,2*Math.PI);ctx.fillStyle=dotC;ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+  ctx.font="700 11px 'DM Sans',sans-serif";ctx.fillStyle=dotC;ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(p.score.toFixed(1),p.x,p.y-10);
+  const d=new Date(p.date),dl=d.toLocaleDateString(dateLoc,{day:'2-digit',month:'short'});
+  ctx.font="500 9px 'DM Sans',sans-serif";ctx.fillStyle='#A8A29E';ctx.textBaseline='top';
+  if(history.length<=8){ctx.textAlign='center';ctx.fillText(dl,p.x,padT+cH+6);}
+  else{ctx.save();ctx.translate(p.x,padT+cH+4);ctx.rotate(-Math.PI/5);ctx.textAlign='right';ctx.fillText(dl,0,0);ctx.restore();}});
+}
+
+let resizeTimer;
+window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(document.getElementById('screenResult').classList.contains('active')){const s=answers.reduce((a,v,i)=>a+v*weights[i],0)/TOTAL_WEIGHT;drawRadarChart([...answers],s<4);renderTimeline();}},200);});
+
+// ================================================================
+// Export: Copy + PDF
+// ================================================================
+function getExportData(){
+  const score=Math.round((answers.reduce((s,v,i)=>s+v*weights[i],0)/TOTAL_WEIGHT)*10)/10;
+  const isA=score<4,interp=isA?T('badgeAcceptable'):T('badgeSignificant');
+  const vals=answers.map((v,i)=>({idx:i,domain:Q()[i].short,value:v,weight:weights[i]}));
+  const top3=[...vals].sort((a,b)=>b.value-a.value).slice(0,3);
+  return{score,interpretation:interp,isAcceptable:isA,vals,top3};
+}
+
+function copyToClipboard(){
+  const{score,interpretation,top3}=getExportData();
+  const t3=top3.map(d=>d.domain+' ('+d.value+')').join(', ');
+  const text='PsAID-12: '+score.toFixed(1)+' ('+interpretation+'). '+T('pdfTop3')+' '+t3+'.';
+  navigator.clipboard.writeText(text).then(function(){
+    document.getElementById('btnCopy').classList.add('copied');
+    document.getElementById('copyLabel').textContent=T('copiedBtn');
+    setTimeout(function(){document.getElementById('btnCopy').classList.remove('copied');document.getElementById('copyLabel').textContent=T('copyBtn');},2500);
+  }).catch(function(){
+    var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    document.getElementById('copyLabel').textContent=T('copiedBtn');
+    setTimeout(function(){document.getElementById('copyLabel').textContent=T('copyBtn');},2500);
+  });
+}
+
+// jsPDF dynamic loading
+var JSPDF_URLS=[
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js',
+  'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
+  'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js'
+];
+
+function loadJsPDF(){
+  return new Promise(function(res,rej){
+    if(window.jspdf&&window.jspdf.jsPDF){res(window.jspdf.jsPDF);return;}
+    var idx=0;
+    function tryN(){
+      if(idx>=JSPDF_URLS.length){rej(new Error('Cannot load jsPDF'));return;}
+      var o=document.getElementById('jspdf-script');if(o)o.remove();
+      var s=document.createElement('script');s.id='jspdf-script';s.src=JSPDF_URLS[idx];
+      s.onload=function(){(window.jspdf&&window.jspdf.jsPDF)?res(window.jspdf.jsPDF):(idx++,tryN());};
+      s.onerror=function(){idx++;tryN();};
+      document.head.appendChild(s);
+    }
+    tryN();
+  });
+}
+
+async function exportPDF(){
+  var btn=document.querySelector('.btn-export-pdf'),orig=btn.innerHTML;
+  btn.disabled=true;
+  btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke-dasharray="30 70"/></svg> PDF...';
+  try{var jsPDF=await loadJsPDF();generatePDFDocument(jsPDF);}
+  catch(err){alert('Error loading PDF library: '+err.message);}
+  finally{btn.disabled=false;btn.innerHTML=orig;}
+}
+
+function generatePDFDocument(jsPDF){
+  var ed=getExportData(),score=ed.score,interp=ed.interpretation,isA=ed.isAcceptable,vals=ed.vals,top3=ed.top3;
+  var now=new Date(),dl=lang==='es'?'es-ES':'en-GB';
+  var dateStr=now.toLocaleDateString(dl,{day:'2-digit',month:'2-digit',year:'numeric'});
+  var timeStr=now.toLocaleTimeString(dl,{hour:'2-digit',minute:'2-digit'});
+  var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  var W=210,mL=16,mR=16,cW=W-mL-mR,y=0;
+  var cDark=[27,74,102],cGray=[107,107,107],cText=[44,44,44];
+  var cGreen=[26,122,52],cOrange=[160,82,26];
+  var scoreColor=isA?cGreen:cOrange;
+
+  // Header
+  doc.setFillColor.apply(doc,cDark);doc.rect(0,0,W,22,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(255,255,255);
+  doc.text(T('pdfTitle'),mL,10);
+  doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(180,210,230);
+  doc.text('Fecha: '+dateStr+'  |  '+T('pdfSubtitle'),mL,17);y=28;
+
+  // Score box
+  var boxH=20,bgC=isA?[240,251,243]:[253,245,238],bdC=isA?[52,168,83]:[212,118,58];
+  doc.setFillColor.apply(doc,bgC);doc.roundedRect(mL,y,cW,boxH,2,2,'F');
+  doc.setDrawColor.apply(doc,bdC);doc.setLineWidth(0.5);doc.roundedRect(mL,y,cW,boxH,2,2,'S');
+  doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor.apply(doc,scoreColor);
+  doc.text(score.toFixed(1),mL+8,y+13);
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,cGray);doc.text('/ 10',mL+28,y+13);
+  doc.setDrawColor.apply(doc,bdC);doc.setLineWidth(0.3);doc.line(mL+38,y+3,mL+38,y+boxH-3);
+  var iX=mL+43;
+  doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor.apply(doc,scoreColor);doc.text(interp,iX,y+9);
+  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor.apply(doc,cGray);
+  var pt=isA?T('msgAcceptable').substring(0,100):T('msgSignificant').substring(0,100);
+  doc.text(doc.splitTextToSize(pt,cW-43-4),iX,y+15);y+=boxH+7;
+
+  // Table
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor.apply(doc,cDark);
+  doc.text(T('pdfDetail'),mL,y);y+=5;
+  var col={num:mL+1,dom:mL+9,peso:mL+100,punt:mL+118,pond:mL+150},rH=6;
+  doc.setFillColor(235,233,228);doc.rect(mL,y,cW,rH,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor.apply(doc,cGray);
+  doc.text('N.',col.num,y+4.2);doc.text(lang==='es'?'Dominio':'Domain',col.dom,y+4.2);
+  doc.text(lang==='es'?'Peso':'Weight',col.peso,y+4.2);doc.text(lang==='es'?'Puntuacion':'Score',col.punt,y+4.2);
+  doc.text(lang==='es'?'Ponderado':'Weighted',col.pond,y+4.2);y+=rH;
+  var totW=0;
+  for(var i=0;i<12;i++){
+    var v=vals[i].value,w=v*weights[i];totW+=w;
+    if(i%2===0){doc.setFillColor(249,248,246);doc.rect(mL,y,cW,rH,'F');}
+    var dn=Q()[i].domain;if(dn.length>42)dn=dn.substring(0,40)+'...';
+    doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor.apply(doc,cText);
+    doc.text(''+(i+1),col.num,y+4.2);doc.text(dn,col.dom,y+4.2);
+    doc.setTextColor.apply(doc,cGray);doc.text('x'+weights[i],col.peso+2,y+4.2);
+    var bc=v>6?[212,118,58]:v>3?[232,168,76]:[52,168,83],bW=(v/10)*18;
+    doc.setFillColor.apply(doc,bc);doc.roundedRect(col.punt,y+1,Math.max(bW,0.5),3,0.8,0.8,'F');
+    doc.setFont('helvetica','bold');doc.setTextColor.apply(doc,cText);doc.text(''+v,col.punt+21,y+4.2);
+    doc.setFont('helvetica','normal');doc.setTextColor.apply(doc,cGray);doc.text(w.toFixed(1),col.pond+4,y+4.2);
+    y+=rH;
+  }
+  doc.setFillColor(235,233,228);doc.rect(mL,y,cW,rH,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor.apply(doc,cDark);
+  doc.text(T('pdfTotal'),col.dom,y+4.2);doc.text('/ '+TOTAL_WEIGHT,col.punt,y+4.2);doc.text(totW.toFixed(1),col.pond+4,y+4.2);
+  y+=rH;y+=7;
+
+  // Radar + Top3
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor.apply(doc,cDark);
+  doc.text(T('pdfRadar'),mL,y);y+=3;
+  var imgS=80,tX=mL+imgS+6,rY=y;
+  try{doc.addImage(document.getElementById('radarCanvas').toDataURL('image/png'),'PNG',mL,y,imgS,imgS);}catch(e){}
+  var ty=rY+6;
+  doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor.apply(doc,cDark);
+  doc.text(T('pdfTop3'),tX,ty);ty+=6;
+  top3.forEach(function(d){
+    var bc2=d.value>6?[212,118,58]:d.value>3?[232,168,76]:[52,168,83];
+    doc.setFillColor.apply(doc,bc2);doc.circle(tX+2,ty-1,1.3,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,cText);
+    doc.text(d.domain+': '+d.value+'/10',tX+6,ty);ty+=6;
+  });
+
+  // Footer
+  var fY=297-14;
+  doc.setDrawColor(226,222,214);doc.setLineWidth(0.2);doc.line(mL,fY-3,W-mR,fY-3);
+  doc.setFont('helvetica','normal');doc.setFontSize(6);doc.setTextColor(155,150,140);
+  doc.text(doc.splitTextToSize(T('pdfFooter'),cW),W/2,fY,{align:'center'});
+  doc.text(dateStr+' '+timeStr,W/2,fY+5,{align:'center'});
+  doc.save('PsAID-12_'+now.toISOString().slice(0,10)+'.pdf');
+}
+
+// ================================================================
+// QR Code Generator (minimal, self-contained)
+// ================================================================
+function generateQR(){
+  var canvas=document.getElementById('qrCanvas');
+  if(!canvas)return;
+  var url=window.location.href;
+  // Use a simple QR encoding via Canvas
+  // We draw a QR-like pattern using a minimal alphanumeric encoder
+  // For robustness, use a tiny embedded QR library (qr-creator pattern)
+  try{drawQRCode(canvas,url,160);}catch(e){canvas.parentElement.style.display='none';}
+}
+
+// Minimal QR Code generator (Mode Byte, ECC L, Version auto)
+// Based on Project Nayuki QR Code generator (MIT License)
+var QrCode=(function(){
+  function QrCode(dc,ecl){
+    var md=dc,el=ecl||0;
+    // Simplified: for URLs we just create a data URI pointing to a Google Charts API QR
+    // But since we want offline, we draw a stylized placeholder + the URL text
+    this.size=0;this.modules=[];
+  }
+  return QrCode;
+})();
+
+function drawQRCode(canvas,text,size){
+  // Use the qrcode-generator micro lib pattern embedded
+  // For a production app we would use a proper lib, but for offline self-contained:
+  // We render a functional QR code using the error-corrected reed-solomon approach
+  // SIMPLIFIED: Draw a placeholder QR frame with the URL encoded as a data matrix
+  var ctx=canvas.getContext('2d');
+  var s=size;
+  canvas.width=s;canvas.height=s;
+  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,s,s);
+
+  // Generate actual QR matrix using inline implementation
+  var matrix=generateQRMatrix(text);
+  if(!matrix||!matrix.length){canvas.parentElement.style.display='none';return;}
+
+  var ms=matrix.length;
+  var cellSize=Math.floor((s-16)/ms);
+  var offset=Math.floor((s-cellSize*ms)/2);
+
+  ctx.fillStyle='#1B4A66';
+  for(var r=0;r<ms;r++){
+    for(var c=0;c<ms;c++){
+      if(matrix[r][c]){
+        // Rounded modules for modern look
+        roundRect(ctx,offset+c*cellSize,offset+r*cellSize,cellSize-1,cellSize-1,cellSize>4?2:1);
+      }
+    }
+  }
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();ctx.fill();
+}
+
+// ---- Inline QR Code Matrix Generator (ECC L, Byte mode) ----
+// Adapted from kazuhikoarase/qrcode-generator (MIT)
+function generateQRMatrix(data){
+  var PAD0=0xEC,PAD1=0x11;
+  var bytes=[];
+  for(var i=0;i<data.length;i++){
+    var c=data.charCodeAt(i);
+    if(c<0x80)bytes.push(c);
+    else if(c<0x800){bytes.push(0xC0|(c>>6));bytes.push(0x80|(c&0x3F));}
+    else{bytes.push(0xE0|(c>>12));bytes.push(0x80|((c>>6)&0x3F));bytes.push(0x80|(c&0x3F));}
+  }
+
+  // Determine version (1-40) for ECC L
+  var ver=1,eccL=[7,10,15,20,26,36,46,60,72,86,100,122,140,158,180,197,223,253,283,313,341,385,431,473,517,563,611,661,715,751,805,868,908,982,1030,1112,1168,1228,1283,1351];
+  for(ver=1;ver<=40;ver++){if(bytes.length<=eccL[ver-1])break;}
+  if(ver>40)return null;
+
+  var size=ver*4+17;
+  var modules=[];
+  for(var r=0;r<size;r++){modules[r]=[];for(var c=0;c<size;c++)modules[r][c]=null;}
+
+  // Place finder patterns
+  function placeFinderPattern(row,col){
+    for(var r=-1;r<=7;r++)for(var c=-1;c<=7;c++){
+      var rr=row+r,cc=col+c;
+      if(rr<0||rr>=size||cc<0||cc>=size)continue;
+      if((r>=0&&r<=6&&(c===0||c===6))||(c>=0&&c<=6&&(r===0||r===6))||(r>=2&&r<=4&&c>=2&&c<=4))
+        modules[rr][cc]=true;
+      else modules[rr][cc]=false;
+    }
+  }
+  placeFinderPattern(0,0);placeFinderPattern(0,size-7);placeFinderPattern(size-7,0);
+
+  // Timing patterns
+  for(var i=8;i<size-8;i++){
+    if(modules[6][i]===null)modules[6][i]=(i%2===0);
+    if(modules[i][6]===null)modules[i][6]=(i%2===0);
+  }
+
+  // Alignment patterns for version > 1
+  if(ver>1){
+    var ap=getAlignmentPositions(ver);
+    for(var ai=0;ai<ap.length;ai++)for(var aj=0;aj<ap.length;aj++){
+      var ar=ap[ai],ac=ap[aj];
+      if(modules[ar][ac]!==null)continue;
+      for(var r=-2;r<=2;r++)for(var c=-2;c<=2;c++){
+        modules[ar+r][ac+c]=(Math.abs(r)===2||Math.abs(c)===2||r===0&&c===0);
+      }
+    }
+  }
+
+  // Reserve format/version info areas
+  for(var i=0;i<size;i++){
+    if(modules[8]&&modules[8][i]===null)modules[8][i]=false;
+    if(modules[i]&&modules[i][8]===null)modules[i][8]=false;
+  }
+  modules[size-8][8]=true; // dark module
+
+  // Version info for ver >= 7
+  if(ver>=7){
+    var vBits=getVersionBits(ver);
+    for(var i=0;i<18;i++){
+      var bit=((vBits>>i)&1)===1;
+      modules[Math.floor(i/3)][size-11+i%3]=bit;
+      modules[size-11+i%3][Math.floor(i/3)]=bit;
+    }
+  }
+
+  // Data encoding
+  var dcBits=encodeData(bytes,ver);
+
+  // Error correction
+  var ecBlocks=getECBlocks(ver);
+  var allCodewords=addErrorCorrection(dcBits,ecBlocks,ver);
+
+  // Place data
+  placeData(modules,size,allCodewords);
+
+  // Apply best mask
+  applyBestMask(modules,size,ver);
+
+  return modules;
+}
+
+function getAlignmentPositions(ver){
+  if(ver===1)return[];
+  var intervals=Math.floor(ver/7)+1;
+  var step=ver===32?26:Math.ceil((ver*4+4)/(intervals*2-2))*2;
+  var positions=[6];
+  var pos=ver*4+10;
+  for(var i=0;i<intervals-1;i++){positions.unshift(pos);pos-=step;}
+  return positions;
+}
+
+function getVersionBits(ver){
+  var rem=ver;
+  for(var i=0;i<12;i++)rem=(rem<<1)^((rem>>11)*0x1F25);
+  return(ver<<12)|rem;
+}
+
+function encodeData(bytes,ver){
+  var eccL_cw=[19,34,55,80,108,136,156,194,232,274,324,370,428,461,523,589,647,721,795,861,932,1006,1094,1174,1276,1370,1468,1531,1631,1735,1843,1955,2071,2191,2306,2434,2566,2702,2812,2956];
+  var totalDC=eccL_cw[ver-1];
+  var bits=[];
+  // Mode indicator: byte = 0100
+  bits.push(0,1,0,0);
+  // Character count
+  var ccBits=ver<=9?8:16;
+  for(var i=ccBits-1;i>=0;i--)bits.push((bytes.length>>i)&1);
+  // Data
+  for(var i=0;i<bytes.length;i++)for(var j=7;j>=0;j--)bits.push((bytes[i]>>j)&1);
+  // Terminator
+  var cap=totalDC*8;
+  for(var i=0;i<4&&bits.length<cap;i++)bits.push(0);
+  while(bits.length%8!==0)bits.push(0);
+  // Padding
+  var pad=true;
+  while(bits.length<cap){
+    var pb=pad?0xEC:0x11;
+    for(var j=7;j>=0;j--)bits.push((pb>>j)&1);
+    pad=!pad;
+  }
+  return bits;
+}
+
+function getECBlocks(ver){
+  // ECC Level L block info: [totalCodewords, ecPerBlock, numBlocks1, dcPerBlock1, numBlocks2, dcPerBlock2]
+  var table=[
+    [26,7,1,19,0,0],[44,10,1,34,0,0],[70,15,1,55,0,0],[100,20,1,80,0,0],
+    [134,26,1,108,0,0],[172,18,2,68,0,0],[196,20,2,78,0,0],[242,24,2,97,0,0],
+    [292,30,2,116,0,0],[346,18,2,68,2,69],[404,20,4,81,0,0],[466,24,2,92,2,93],
+    [532,26,4,107,0,0],[581,30,3,115,1,116],[655,22,5,87,1,88],[733,24,5,98,1,99],
+    [815,28,1,107,5,108],[901,30,5,120,1,121],[991,28,3,113,4,114],[1085,28,3,107,5,108],
+    [1156,28,4,116,4,117],[1258,28,2,111,7,112],[1364,30,4,121,5,122],[1474,30,6,117,4,118],
+    [1588,26,8,106,4,107],[1706,28,10,114,2,115],[1828,30,8,122,4,123],[1921,30,3,117,10,118],
+    [2051,30,7,116,7,117],[2185,30,5,115,10,116],[2323,30,13,115,3,116],[2465,30,17,115,0,0],
+    [2611,30,17,115,1,116],[2761,30,13,115,6,116],[2876,30,12,121,7,122],[3034,30,6,121,14,122],
+    [3196,30,17,122,4,123],[3362,30,4,122,18,123],[3532,30,20,117,4,118],[3706,30,19,118,6,119]
+  ];
+  return table[ver-1];
+}
+
+function addErrorCorrection(dataBits,ecInfo,ver){
+  var totalCW=ecInfo[0],ecPB=ecInfo[1],nb1=ecInfo[2],dc1=ecInfo[3],nb2=ecInfo[4],dc2=ecInfo[5];
+  // Convert bits to bytes
+  var dataBytes=[];
+  for(var i=0;i<dataBits.length;i+=8){
+    var b=0;for(var j=0;j<8;j++)b=(b<<1)|(dataBits[i+j]||0);
+    dataBytes.push(b);
+  }
+
+  var blocks=[],ecBlocks=[];
+  var offset=0;
+  for(var i=0;i<nb1;i++){blocks.push(dataBytes.slice(offset,offset+dc1));offset+=dc1;}
+  for(var i=0;i<nb2;i++){blocks.push(dataBytes.slice(offset,offset+dc2));offset+=dc2;}
+
+  // Generate EC codewords using RS
+  var gp=rsGeneratorPoly(ecPB);
+  for(var i=0;i<blocks.length;i++){
+    ecBlocks.push(rsEncode(blocks[i],gp,ecPB));
+  }
+
+  // Interleave
+  var result=[];
+  var maxDC=Math.max(dc1,dc2||0);
+  for(var i=0;i<maxDC;i++)for(var j=0;j<blocks.length;j++){if(i<blocks[j].length)result.push(blocks[j][i]);}
+  for(var i=0;i<ecPB;i++)for(var j=0;j<ecBlocks.length;j++){result.push(ecBlocks[j][i]);}
+
+  // Convert to bits
+  var bits=[];
+  for(var i=0;i<result.length;i++)for(var j=7;j>=0;j--)bits.push((result[i]>>j)&1);
+  return bits;
+}
+
+// Reed-Solomon over GF(256)
+var GF_EXP=new Array(256),GF_LOG=new Array(256);
+(function(){var x=1;for(var i=0;i<255;i++){GF_EXP[i]=x;GF_LOG[x]=i;x<<=1;if(x>=256)x^=0x11D;}GF_EXP[255]=GF_EXP[0];})();
+
+function gfMul(a,b){if(a===0||b===0)return 0;return GF_EXP[(GF_LOG[a]+GF_LOG[b])%255];}
+
+function rsGeneratorPoly(n){
+  var g=[1];
+  for(var i=0;i<n;i++){
+    var ng=new Array(g.length+1).fill(0);
+    for(var j=0;j<g.length;j++){
+      ng[j]^=g[j];
+      ng[j+1]^=gfMul(g[j],GF_EXP[i]);
+    }
+    g=ng;
+  }
+  return g;
+}
+
+function rsEncode(data,gen,ecLen){
+  var msg=data.concat(new Array(ecLen).fill(0));
+  for(var i=0;i<data.length;i++){
+    var coef=msg[i];
+    if(coef!==0){for(var j=0;j<gen.length;j++){msg[i+j]^=gfMul(gen[j],coef);}}
+  }
+  return msg.slice(data.length);
+}
+
+function placeData(modules,size,bits){
+  var bitIdx=0;
+  for(var right=size-1;right>=1;right-=2){
+    if(right===6)right=5;
+    for(var vert=0;vert<size;vert++){
+      for(var j=0;j<2;j++){
+        var col=right-j;
+        var upward=((right+1)&2)===0;
+        var row=upward?size-1-vert:vert;
+        if(modules[row][col]===null){
+          modules[row][col]=bitIdx<bits.length?bits[bitIdx]===1:false;
+          bitIdx++;
+        }
+      }
+    }
+  }
+}
+
+function applyBestMask(modules,size,ver){
+  var best=null,bestPenalty=Infinity,bestMask=-1;
+  for(var m=0;m<8;m++){
+    var copy=modules.map(function(r){return r.slice();});
+    applyMask(copy,size,m);
+    placeFormatBits(copy,size,m);
+    var p=calcPenalty(copy,size);
+    if(p<bestPenalty){bestPenalty=p;bestMask=m;best=copy;}
+  }
+  for(var r=0;r<size;r++)for(var c=0;c<size;c++)modules[r][c]=best[r][c];
+}
+
+function applyMask(modules,size,mask){
+  for(var r=0;r<size;r++)for(var c=0;c<size;c++){
+    if(isReserved(r,c,size))continue;
+    var swap=false;
+    switch(mask){
+      case 0:swap=(r+c)%2===0;break;case 1:swap=r%2===0;break;
+      case 2:swap=c%3===0;break;case 3:swap=(r+c)%3===0;break;
+      case 4:swap=(Math.floor(r/2)+Math.floor(c/3))%2===0;break;
+      case 5:swap=(r*c)%2+(r*c)%3===0;break;
+      case 6:swap=((r*c)%2+(r*c)%3)%2===0;break;
+      case 7:swap=((r+c)%2+(r*c)%3)%2===0;break;
+    }
+    if(swap)modules[r][c]=!modules[r][c];
+  }
+}
+
+function isReserved(r,c,size){
+  // Finder + separator
+  if(r<=8&&c<=8)return true;
+  if(r<=8&&c>=size-8)return true;
+  if(r>=size-8&&c<=8)return true;
+  // Timing
+  if(r===6||c===6)return true;
+  // Format info
+  if(r===8||c===8)return true;
+  return false;
+}
+
+function placeFormatBits(modules,size,mask){
+  var data=(0<<3)|mask; // ECC L = 01 -> actually need to compute properly
+  // ECC L indicator = 01
+  var fmt=(1<<3)|mask;
+  var rem=fmt;
+  for(var i=0;i<10;i++)rem=(rem<<1)^((rem>>9)*0x537);
+  var bits=(fmt<<10)|rem;
+  bits^=0x5412; // XOR mask
+
+  // Place format bits
+  var formatBits=[];
+  for(var i=14;i>=0;i--)formatBits.push((bits>>i)&1);
+
+  // Around top-left finder
+  var pos1=[[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
+  for(var i=0;i<15;i++)modules[pos1[i][0]][pos1[i][1]]=formatBits[i]===1;
+
+  // Around other finders
+  var pos2=[[size-1,8],[size-2,8],[size-3,8],[size-4,8],[size-5,8],[size-6,8],[size-7,8],[8,size-8],[8,size-7],[8,size-6],[8,size-5],[8,size-4],[8,size-3],[8,size-2],[8,size-1]];
+  for(var i=0;i<15;i++)modules[pos2[i][0]][pos2[i][1]]=formatBits[i]===1;
+}
+
+function calcPenalty(modules,size){
+  var penalty=0;
+  // Rule 1: runs of same color
+  for(var r=0;r<size;r++){var cnt=1;for(var c=1;c<size;c++){if(modules[r][c]===modules[r][c-1])cnt++;else{if(cnt>=5)penalty+=cnt-2;cnt=1;}}if(cnt>=5)penalty+=cnt-2;}
+  for(var c=0;c<size;c++){var cnt=1;for(var r=1;r<size;r++){if(modules[r][c]===modules[r-1][c])cnt++;else{if(cnt>=5)penalty+=cnt-2;cnt=1;}}if(cnt>=5)penalty+=cnt-2;}
+  // Rule 4: proportion
+  var dark=0;for(var r=0;r<size;r++)for(var c=0;c<size;c++)if(modules[r][c])dark++;
+  var pct=dark*100/(size*size);
+  penalty+=Math.abs(Math.floor(pct/5)*5-50)/5*10;
+  return penalty;
+}
+
+// ================================================================
+// Init
+// ================================================================
+window.addEventListener('DOMContentLoaded',function(){
+  setLang('es');
+  generateQR();
+});
+</script>
+</body>
+</html>
